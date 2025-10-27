@@ -304,6 +304,11 @@
                 padding: 1.5rem;
             }
         }
+
+        @keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
     </style>
 </head>
 <body>
@@ -397,9 +402,55 @@
         <p>&copy;  2025 - Dari aku, buat kamu</p>
     </footer>
 
-   <audio controls>
-    <source src="diva.mp3" type="audio/mpeg">
+    <div id="musicControl" style="
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  z-index: 1000;
+">
+  <!-- Vinyl berputar -->
+  <div id="vinyl" style="
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: radial-gradient(circle at center, #333 35%, #111 70%);
+    border: 3px solid #ff6b6b;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.4);
+    animation: spin 4s linear infinite;
+    animation-play-state: paused;
+  ">
+    🎶
+  </div>
+
+  <!-- Tombol Play/Pause -->
+  <button id="musicBtn" style="
+    background: linear-gradient(45deg, #e91e63, #ff6b6b);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    width: 55px;
+    height: 55px;
+    font-size: 22px;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.3s ease;
+  ">🎵</button>
+</div>
+
+<!-- Musik -->
+<audio id="bgMusic" loop>
+  <source src="diva.mp3" type="audio/mpeg">
 </audio>
+
+ 
     <script>
         // Create floating hearts
         function createFloatingHearts() {
@@ -496,6 +547,28 @@
 
         // Initialize floating hearts on page load
         window.addEventListener('load', createFloatingHearts);
+
+        const btn = document.getElementById('musicBtn');
+const music = document.getElementById('bgMusic');
+const vinyl = document.getElementById('vinyl');
+let isPlaying = false;
+
+btn.addEventListener('click', () => {
+  if (!isPlaying) {
+    music.play();
+    btn.textContent = "⏸️";
+    vinyl.style.animationPlayState = "running"; // mulai berputar
+    isPlaying = true;
+  } else {
+    music.pause();
+    btn.textContent = "🎵";
+    vinyl.style.animationPlayState = "paused"; // berhenti berputar
+    isPlaying = false;
+  }
+});
+
+btn.addEventListener('mouseenter', () => btn.style.transform = "scale(1.1)");
+btn.addEventListener('mouseleave', () => btn.style.transform = "scale(1)");
     </script>
 </body>
 </html>
